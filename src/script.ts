@@ -26,13 +26,16 @@ class GameBoard {
 
 class displayController {
     public static display(gameboard : GameBoard) {
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                console.log(gameboard.get(i, j));
+        let cells = document.querySelectorAll<HTMLDivElement>(".cell");
+        let r = 0, c = 0;
+        cells.forEach(cell => {
+            cell.textContent = gameboard.get(r, c);
+            if (c === 2) {
+                r++; c = 0;
+            } else {
+                c++;
             }
-            console.log("\n")
-        }
-        console.log("\n")
+        });
     }
 }
 
@@ -60,7 +63,7 @@ class Game {
     public makeMove(row : number, col : number) {
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
+        displayController.display(this.gameboard);
     }
 }
 
-let game = new Game();

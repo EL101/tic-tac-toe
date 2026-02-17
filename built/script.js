@@ -26,13 +26,18 @@ var displayController = /** @class */ (function () {
     function displayController() {
     }
     displayController.display = function (gameboard) {
-        for (var i = 0; i < 3; i++) {
-            for (var j = 0; j < 3; j++) {
-                console.log(gameboard.get(i, j));
+        var cells = document.querySelectorAll(".cell");
+        var r = 0, c = 0;
+        cells.forEach(function (cell) {
+            cell.textContent = gameboard.get(r, c);
+            if (c === 2) {
+                r++;
+                c = 0;
             }
-            console.log("\n");
-        }
-        console.log("\n");
+            else {
+                c++;
+            }
+        });
     };
     return displayController;
 }());
@@ -60,7 +65,7 @@ var Game = /** @class */ (function () {
     Game.prototype.makeMove = function (row, col) {
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
+        displayController.display(this.gameboard);
     };
     return Game;
 }());
-var game = new Game();
