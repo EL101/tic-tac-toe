@@ -1,51 +1,51 @@
-class GameBoard {
-    private board : string[][];
-    private turn : number;
-    public constructor() {
+"use strict";
+var GameBoard = /** @class */ (function () {
+    function GameBoard() {
         this.board = [
             ["", "", ""],
             ["", "", ""],
             ["", "", ""]
-        ]
+        ];
         this.turn = 0;
     }
-    public incTurn() {
+    GameBoard.prototype.incTurn = function () {
         this.turn++;
-    }
-    public getTurn() {
+    };
+    GameBoard.prototype.getTurn = function () {
         return this.turn;
-    }
-    public get(row : number, col : number) {
+    };
+    GameBoard.prototype.get = function (row, col) {
         return this.board[row][col];
-    }
-    public edit(row: number, col: number, move: "X" | "O") {
+    };
+    GameBoard.prototype.edit = function (row, col, move) {
         this.board[row][col] = move;
+    };
+    return GameBoard;
+}());
+var displayController = /** @class */ (function () {
+    function displayController() {
     }
-
-}
-
-class displayController {
-    public static display(gameboard : GameBoard) {
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
+    displayController.display = function (gameboard) {
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
                 console.log(gameboard.get(i, j));
             }
-            console.log("\n")
+            console.log("\n");
         }
-        console.log("\n")
-    }
-}
-
-class Game {
-    private gameboard : GameBoard;
-    public constructor() {
+        console.log("\n");
+    };
+    return displayController;
+}());
+var Game = /** @class */ (function () {
+    function Game() {
         this.gameboard = new GameBoard();
     }
-    public getWinner() {
-        for (let i = 0; i < 3; i++) {
+    Game.prototype.getWinner = function () {
+        for (var i = 0; i < 3; i++) {
             if (this.gameboard.get(i, 0) !== "" && this.gameboard.get(i, 0) === this.gameboard.get(i, 1) && this.gameboard.get(i, 0) === this.gameboard.get(i, 2)) {
                 return this.gameboard.get(i, 0);
-            } else if (this.gameboard.get(0, i) !== "" && this.gameboard.get(0, i) === this.gameboard.get(1, i) && this.gameboard.get(1, i) === this.gameboard.get(2, i)) {
+            }
+            else if (this.gameboard.get(0, i) !== "" && this.gameboard.get(0, i) === this.gameboard.get(1, i) && this.gameboard.get(1, i) === this.gameboard.get(2, i)) {
                 return this.gameboard.get(0, i);
             }
         }
@@ -56,9 +56,11 @@ class Game {
             return this.gameboard.get(0, 2);
         }
         return "";
-    }
-    public makeMove(row : number, col : number) {
+    };
+    Game.prototype.makeMove = function (row, col) {
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
-    }
-}
+    };
+    return Game;
+}());
+var game = new Game();
