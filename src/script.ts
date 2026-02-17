@@ -65,6 +65,10 @@ class Game {
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
+        if (this.getWinner() !== "") {
+            this.gameboard = new GameBoard();
+            displayController.display(this.gameboard);
+        }
     }
 }
 

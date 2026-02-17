@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+:root {
+    --cell-dim: min(450px, min(60vw, 70vh));
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -19,15 +23,19 @@ body {
 .scoreboard {
     border: 1px solid blue;
     height: 100px;
-    width: 50%;
+    width: var(--cell-dim);
 }
 .gameboard {
-    width: 50%;
-    height: 50%;
+    width: var(--cell-dim);
+    height: var(--cell-dim);
     display: grid;
     grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
 }
 .cell {
     border: 1px solid black;
     padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
 }
