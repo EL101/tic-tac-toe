@@ -61,9 +61,17 @@ class Game {
         return "";
     }
     public makeMove(row : number, col : number) {
+        if (this.gameboard.get(row, col) !== "") return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
     }
 }
 
+const game = new Game();
+document.querySelectorAll<HTMLDivElement>(".cell").forEach(cell => {
+    cell.addEventListener("click", e => {
+        if (cell.dataset.row === undefined || cell.dataset.col === undefined) return;
+        game.makeMove(parseInt(cell.dataset.row), parseInt(cell.dataset.col));
+    });
+})

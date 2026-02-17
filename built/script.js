@@ -63,9 +63,19 @@ var Game = /** @class */ (function () {
         return "";
     };
     Game.prototype.makeMove = function (row, col) {
+        if (this.gameboard.get(row, col) !== "")
+            return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
     };
     return Game;
 }());
+var game = new Game();
+document.querySelectorAll(".cell").forEach(function (cell) {
+    cell.addEventListener("click", function (e) {
+        if (cell.dataset.row === undefined || cell.dataset.col === undefined)
+            return;
+        game.makeMove(parseInt(cell.dataset.row), parseInt(cell.dataset.col));
+    });
+});
