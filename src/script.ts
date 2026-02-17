@@ -44,7 +44,7 @@ class Game {
     public constructor() {
         this.gameboard = new GameBoard();
     }
-    public getWinner() {
+    private getWinner() {
         for (let i = 0; i < 3; i++) {
             if (this.gameboard.get(i, 0) !== "" && this.gameboard.get(i, 0) === this.gameboard.get(i, 1) && this.gameboard.get(i, 0) === this.gameboard.get(i, 2)) {
                 return this.gameboard.get(i, 0);
@@ -60,12 +60,23 @@ class Game {
         }
         return "";
     }
+    private hasEmptyCell() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (this.gameboard.get(i, j) === "") return true;
+            }
+        }
+        return false;
+    }
     public makeMove(row : number, col : number) {
         if (this.gameboard.get(row, col) !== "") return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
         if (this.getWinner() !== "") {
+            this.gameboard = new GameBoard();
+            displayController.display(this.gameboard);
+        } else if (!this.hasEmptyCell()) {
             this.gameboard = new GameBoard();
             displayController.display(this.gameboard);
         }

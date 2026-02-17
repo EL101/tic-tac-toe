@@ -62,6 +62,15 @@ var Game = /** @class */ (function () {
         }
         return "";
     };
+    Game.prototype.hasEmptyCell = function () {
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                if (this.gameboard.get(i, j) === "")
+                    return true;
+            }
+        }
+        return false;
+    };
     Game.prototype.makeMove = function (row, col) {
         if (this.gameboard.get(row, col) !== "")
             return;
@@ -69,6 +78,10 @@ var Game = /** @class */ (function () {
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
         if (this.getWinner() !== "") {
+            this.gameboard = new GameBoard();
+            displayController.display(this.gameboard);
+        }
+        else if (!this.hasEmptyCell()) {
             this.gameboard = new GameBoard();
             displayController.display(this.gameboard);
         }
