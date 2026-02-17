@@ -2,10 +2,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: inherit;
 }
 
 :root {
-    --cell-dim: min(450px, min(60vw, 70vh));
+    --cell-dim: min(450px, min(55vw, 70vh));
 }
 
 html, body {
@@ -13,15 +14,25 @@ html, body {
     height: 100%;
 }
 
-h1 {
-    margin-top: 2rem;
-}
-
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: 40px;
+    background-color: rgb(92, 183, 219);
+    font-family: "Knewave", Helvetica, sans-serif;
+    color: rgb(230, 245, 255);
+}
+
+.turn-display {
+    margin-top: 1.5rem;
+    margin-bottom: -2.5rem;
+    font-size: 1.7rem;
+    /* border: 1px solid black; */
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    background-color: rgb(33, 124, 189);
+    box-shadow: 0 0 7px 2px rgba(55, 55, 55, 0.494);
 }
 
 .scoreboard {
@@ -33,17 +44,18 @@ body {
     justify-content: space-between;
 }
 
-.x-score, .o-score {
+.x-score, .o-score, .tie-score {
     /* border: 1px solid black; */
     height: 100%;
-    width: 45%;
+    width: 30%;
     display: flex;
     align-items: center;
-    font-size: 2.5rem;
+    justify-content: center;
+    font-size: min(2.5rem, var(--cell-dim) / 10);
 }
-.o-score {
+/* .o-score {
     justify-content: flex-end;
-}
+} */
 .gameboard {
     width: var(--cell-dim);
     height: var(--cell-dim);
@@ -53,6 +65,7 @@ body {
 }
 
 .cell {
+    color: black;
     border: 2px solid black;
     border-radius: 10px;
     background-color: white;
@@ -60,7 +73,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
+    font-size: min(3rem, var(--cell-dim) / 10);
     transition: color 0.5s ease, background-color 0.75s ease-out, box-shadow ease; 
 }
 
@@ -68,4 +81,21 @@ body {
     color: rgb(255, 255, 255);
     background-color: rgb(81, 174, 81);
     box-shadow: 0 0 7px 3px rgba(82, 171, 82, 0.614);
+}
+
+.restart {
+    --restart-width: calc(var(--cell-dim) / 2.5);
+    width: var(--restart-width);
+    height: calc(var(--cell-dim) / 8);
+    border-radius: 10px;
+    border: 2px solid black;
+    background-color: rgb(33, 124, 189);
+    color: rgb(230, 245, 255);
+    font-size: min(1.4rem, var(--restart-width) / 10);
+    box-shadow: 0 0 7px 3px rgba(97, 97, 97, 0.327);
+}
+
+.restart:hover {
+    cursor: pointer;
+    background-color: rgb(16, 62, 88);
 }

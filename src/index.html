@@ -6,12 +6,16 @@
     <title>Tic-Tac-Toe</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="../built/script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Tic Tac Toe</h1>
+    <div class="turn-display">X's Turn</div>
     <div class="scoreboard">
-        <div class="score x-score">X Score: 0</div>
-        <div class="score o-score">O Score: 0</div>
+        <div class="score x-score">X: 0</div>
+        <div class="score tie-score">Tie: 0</div>
+        <div class="score o-score">O: 0</div>
     </div>
     <div class="gameboard">
         <div class="cell" data-row="0" data-col="0"></div>
