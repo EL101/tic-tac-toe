@@ -44,18 +44,33 @@ class Game {
     public constructor() {
         this.gameboard = new GameBoard();
     }
-    private getWinner() {
+    private colorWinner(points: number[][]) {
+        let cells = document.querySelectorAll<HTMLDivElement>(".cell");
+        cells.forEach(cell => {
+            for (let i = 0; i < 3; i++) {
+                if (cell.dataset.row === undefined || cell.dataset.col === undefined) return;
+                if (parseInt(cell.dataset.row) === points[i][0] && parseInt(cell.dataset.col) === points[i][1]) {
+                    cell.classList.toggle("win-cell");
+                }
+            }
+        })
+    }
+    private getAndDisplayWinner() {
         for (let i = 0; i < 3; i++) {
             if (this.gameboard.get(i, 0) !== "" && this.gameboard.get(i, 0) === this.gameboard.get(i, 1) && this.gameboard.get(i, 0) === this.gameboard.get(i, 2)) {
+                this.colorWinner([[i, 0], [i, 1], [i, 2]]);
                 return this.gameboard.get(i, 0);
             } else if (this.gameboard.get(0, i) !== "" && this.gameboard.get(0, i) === this.gameboard.get(1, i) && this.gameboard.get(1, i) === this.gameboard.get(2, i)) {
+                this.colorWinner([[0, i], [1, i], [2, i]]);
                 return this.gameboard.get(0, i);
             }
         }
         if (this.gameboard.get(0, 0) !== "" && this.gameboard.get(0, 0) === this.gameboard.get(1, 1) && this.gameboard.get(0, 0) === this.gameboard.get(2, 2)) {
+            this.colorWinner([[0, 0], [1, 1], [2, 2]]);
             return this.gameboard.get(0, 0);
         }
         if (this.gameboard.get(0, 2) !== "" && this.gameboard.get(0, 2) === this.gameboard.get(1, 1) && this.gameboard.get(0, 2) === this.gameboard.get(2, 0)) {
+            this.colorWinner([[0, 2], [1, 1], [2, 0]]);
             return this.gameboard.get(0, 2);
         }
         return "";
@@ -73,9 +88,9 @@ class Game {
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
-        if (this.getWinner() !== "") {
-            this.gameboard = new GameBoard();
-            displayController.display(this.gameboard);
+        if (this.getAndDisplayWinner() !== "") {
+            // this.gameboard = new GameBoard();
+            // displayController.display(this.gameboard);
         } else if (!this.hasEmptyCell()) {
             this.gameboard = new GameBoard();
             displayController.display(this.gameboard);
