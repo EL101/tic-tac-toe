@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 var GameBoard = /** @class */ (function () {
     function GameBoard() {
         this.board = [
@@ -58,6 +59,23 @@ var Game = /** @class */ (function () {
             }
         });
     };
+    Game.prototype.colorTie = function () {
+        var cells = document.querySelectorAll(".cell");
+        cells.forEach(function (cell) {
+            cell.classList.toggle("tie-cell");
+        });
+    };
+    Game.prototype.resetCells = function () {
+        var cells = document.querySelectorAll(".cell");
+        cells.forEach(function (cell) {
+            if (cell.classList.contains("win-cell")) {
+                cell.classList.toggle("win-cell");
+            }
+            else if (cell.classList.contains("tie-cell")) {
+                cell.classList.toggle("tie-cell");
+            }
+        });
+    };
     Game.prototype.getWinner = function () {
         for (var i = 0; i < 3; i++) {
             if (this.gameboard.get(i, 0) !== "" && this.gameboard.get(i, 0) === this.gameboard.get(i, 1) && this.gameboard.get(i, 0) === this.gameboard.get(i, 2)) {
@@ -84,19 +102,55 @@ var Game = /** @class */ (function () {
         }
         return false;
     };
+    Game.prototype.updateScoreBoard = function (section) {
+        console.log(section);
+        var scoreChange, numStart;
+        switch (section) {
+            case "X":
+                scoreChange = document.querySelector(".x-score");
+                numStart = 3;
+                break;
+            case "O":
+                scoreChange = document.querySelector(".o-score");
+                numStart = 3;
+                break;
+            case "Tie":
+                scoreChange = document.querySelector(".tie-score");
+                numStart = 5;
+                break;
+        }
+        if (scoreChange !== null && scoreChange !== undefined) {
+            var score = parseInt(scoreChange.textContent.slice(numStart));
+            scoreChange.textContent = scoreChange.textContent.slice(0, numStart) + (score + 1);
+        }
+    };
+    Game.prototype.reset = function () {
+        this.gameboard = new GameBoard();
+        this.won = false;
+        this.resetCells();
+        displayController.display(this.gameboard);
+    };
     Game.prototype.makeMove = function (row, col) {
         if (this.gameboard.get(row, col) !== "" || this.won)
             return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
+        var turnDisplay = document.querySelector(".turn-display");
+        if (turnDisplay !== null) {
+            turnDisplay.textContent = (this.gameboard.getTurn() % 2 === 0 ? "X" : "O") + "'s Turn";
+        }
         var winner = this.getWinner();
         if (winner !== "") {
             this.colorWinner(winner.coords);
             this.won = true;
+            if (turnDisplay !== null)
+                turnDisplay.textContent = winner.player + " Won!";
+            this.updateScoreBoard(winner.player);
         }
         else if (!this.hasEmptyCell()) {
-            //do something
+            this.colorTie();
+            this.updateScoreBoard("Tie");
         }
     };
     return Game;
@@ -108,4 +162,7 @@ document.querySelectorAll(".cell").forEach(function (cell) {
             return;
         game.makeMove(parseInt(cell.dataset.row), parseInt(cell.dataset.col));
     });
+});
+(_a = document.querySelector(".restart")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function (e) {
+    game.reset();
 });

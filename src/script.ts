@@ -55,7 +55,23 @@ class Game {
                     cell.classList.toggle("win-cell");
                 }
             }
-        })
+        });
+    }
+    private colorTie() {
+        let cells = document.querySelectorAll<HTMLDivElement>(".cell");
+        cells.forEach(cell => {
+            cell.classList.toggle("tie-cell");
+        });
+    }
+    private resetCells() {
+        let cells = document.querySelectorAll<HTMLDivElement>(".cell");
+        cells.forEach(cell => {
+            if (cell.classList.contains("win-cell")) {
+                cell.classList.toggle("win-cell");
+            } else if (cell.classList.contains("tie-cell")) {
+                cell.classList.toggle("tie-cell");
+            }
+        });
     }
     private getWinner() : {player: string, coords: number[][]} | "" {
         for (let i = 0; i < 3; i++) {
@@ -81,25 +97,64 @@ class Game {
         }
         return false;
     }
+    private updateScoreBoard(section: string) {
+        console.log(section);
+        let scoreChange, numStart;
+        switch (section) {
+            case "X":
+                scoreChange = document.querySelector(".x-score");
+                numStart = 3;
+                break;
+            case "O":
+                scoreChange = document.querySelector(".o-score");
+                numStart = 3;
+                break;
+            case "Tie":
+                scoreChange = document.querySelector(".tie-score");
+                numStart = 5;
+                break;
+        }
+        if (scoreChange !== null && scoreChange !== undefined) {
+            let score = parseInt(scoreChange.textContent.slice(numStart));
+            scoreChange.textContent = scoreChange.textContent.slice(0, numStart) + (score + 1);
+        }
+    }
+    public reset() {
+        this.gameboard = new GameBoard();
+        this.won = false;
+        this.resetCells();
+        displayController.display(this.gameboard);
+    }
     public makeMove(row : number, col : number) {
         if (this.gameboard.get(row, col) !== "" || this.won) return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
+        let turnDisplay = document.querySelector(".turn-display");
+        if (turnDisplay !== null) {
+            turnDisplay.textContent = (this.gameboard.getTurn() % 2 === 0 ? "X" : "O") + "'s Turn";
+        }
         let winner = this.getWinner();
         if (winner !== "") {
             this.colorWinner(winner.coords);
             this.won = true;
+            if (turnDisplay !== null) turnDisplay.textContent = winner.player + " Won!";
+            this.updateScoreBoard(winner.player);
         } else if (!this.hasEmptyCell()) {
-            //do something
+            this.colorTie();
+            this.updateScoreBoard("Tie");
         }
     }
 }
 
-const game = new Game();
+let game = new Game();
 document.querySelectorAll<HTMLDivElement>(".cell").forEach(cell => {
     cell.addEventListener("click", e => {
         if (cell.dataset.row === undefined || cell.dataset.col === undefined) return;
         game.makeMove(parseInt(cell.dataset.row), parseInt(cell.dataset.col));
     });
-})
+});
+
+document.querySelector<HTMLDivElement>(".restart")?.addEventListener("click", e => {
+    game.reset();
+});
