@@ -1,4 +1,3 @@
-"use strict";
 var GameBoard = /** @class */ (function () {
     function GameBoard() {
         this.board = [

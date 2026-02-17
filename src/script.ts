@@ -40,9 +40,11 @@ class displayController {
 }
 
 class Game {
-    private gameboard : GameBoard;
+    private gameboard: GameBoard;
+    private won: boolean;
     public constructor() {
         this.gameboard = new GameBoard();
+        this.won = false;
     }
     private colorWinner(points: number[][]) {
         let cells = document.querySelectorAll<HTMLDivElement>(".cell");
@@ -55,23 +57,19 @@ class Game {
             }
         })
     }
-    private getAndDisplayWinner() {
+    private getWinner() : {player: string, coords: number[][]} | "" {
         for (let i = 0; i < 3; i++) {
             if (this.gameboard.get(i, 0) !== "" && this.gameboard.get(i, 0) === this.gameboard.get(i, 1) && this.gameboard.get(i, 0) === this.gameboard.get(i, 2)) {
-                this.colorWinner([[i, 0], [i, 1], [i, 2]]);
-                return this.gameboard.get(i, 0);
+                return {player: this.gameboard.get(i, 0), coords: [[i, 0], [i, 1], [i, 2]]};
             } else if (this.gameboard.get(0, i) !== "" && this.gameboard.get(0, i) === this.gameboard.get(1, i) && this.gameboard.get(1, i) === this.gameboard.get(2, i)) {
-                this.colorWinner([[0, i], [1, i], [2, i]]);
-                return this.gameboard.get(0, i);
+                return {player: this.gameboard.get(0, i), coords: [[0, i], [1, i], [2, i]]};
             }
         }
         if (this.gameboard.get(0, 0) !== "" && this.gameboard.get(0, 0) === this.gameboard.get(1, 1) && this.gameboard.get(0, 0) === this.gameboard.get(2, 2)) {
-            this.colorWinner([[0, 0], [1, 1], [2, 2]]);
-            return this.gameboard.get(0, 0);
+            return {player: this.gameboard.get(0, 0), coords: [[0, 0], [1, 1], [2, 2]]};
         }
         if (this.gameboard.get(0, 2) !== "" && this.gameboard.get(0, 2) === this.gameboard.get(1, 1) && this.gameboard.get(0, 2) === this.gameboard.get(2, 0)) {
-            this.colorWinner([[0, 2], [1, 1], [2, 0]]);
-            return this.gameboard.get(0, 2);
+            return {player: this.gameboard.get(0, 2), coords: [[0, 2], [1, 1], [2, 0]]};
         }
         return "";
     }
@@ -84,16 +82,16 @@ class Game {
         return false;
     }
     public makeMove(row : number, col : number) {
-        if (this.gameboard.get(row, col) !== "") return;
+        if (this.gameboard.get(row, col) !== "" || this.won) return;
         this.gameboard.edit(row, col, this.gameboard.getTurn() % 2 === 0 ? "X" : "O");
         this.gameboard.incTurn();
         displayController.display(this.gameboard);
-        if (this.getAndDisplayWinner() !== "") {
-            // this.gameboard = new GameBoard();
-            // displayController.display(this.gameboard);
+        let winner = this.getWinner();
+        if (winner !== "") {
+            this.colorWinner(winner.coords);
+            this.won = true;
         } else if (!this.hasEmptyCell()) {
-            this.gameboard = new GameBoard();
-            displayController.display(this.gameboard);
+            //do something
         }
     }
 }

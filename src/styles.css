@@ -25,11 +25,25 @@ body {
 }
 
 .scoreboard {
-    border: 1px solid blue;
+    border-bottom: 3px solid black;
+    box-shadow: 0 8px 10px -10px gray;
     height: 100px;
     width: var(--cell-dim);
+    display: flex;
+    justify-content: space-between;
 }
 
+.x-score, .o-score {
+    /* border: 1px solid black; */
+    height: 100%;
+    width: 45%;
+    display: flex;
+    align-items: center;
+    font-size: 2.5rem;
+}
+.o-score {
+    justify-content: flex-end;
+}
 .gameboard {
     width: var(--cell-dim);
     height: var(--cell-dim);
@@ -39,7 +53,7 @@ body {
 }
 
 .cell {
-    border: 1px solid black;
+    border: 2px solid black;
     border-radius: 10px;
     background-color: white;
     padding: 1rem;
@@ -47,7 +61,7 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 3rem;
-    transition: color 0.5s ease, background-color 0.75s ease-out, box-shadow ease-out; 
+    transition: color 0.5s ease, background-color 0.75s ease-out, box-shadow ease; 
 }
 
 .win-cell {
